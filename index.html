@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIQUOR VAULT | Premium Collection</title>
+
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  background:#10100f;
+  color:#f5eee2;
+  font-family:Arial,sans-serif;
+}
+
+header {
+  padding:28px 7%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #39332a;
+}
+
+.logo {
+  color:#d5ad62;
+  font-size:27px;
+  font-weight:bold;
+  letter-spacing:4px;
+}
+
+nav a {
+  color:#eee;
+  text-decoration:none;
+  margin-left:20px;
+}
+
+.hero {
+  min-height:380px;
+  padding:100px 8%;
+  background:linear-gradient(90deg,#100e0b 15%,#100e0b99),
+  url("https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1600")
+  center/cover;
+}
+
+.hero h1 {
+  font-size:55px;
+  color:#d9b46e;
+  margin-bottom:15px;
+}
+
+.hero p {
+  color:#ddd;
+  max-width:500px;
+  line-height:1.7;
+}
+
+button {
+  cursor:pointer;
+  border:0;
+  padding:12px 20px;
+  background:#c49a50;
+  color:#17120a;
+  font-weight:bold;
+  border-radius:5px;
+}
+
+.hero button { margin-top:25px; }
+
+section { padding:55px 7%; }
+
+.section-title {
+  color:#d9b46e;
+  font-size:30px;
+  margin-bottom:25px;
+}
+
+.controls {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:30px;
+}
+
+input,select {
+  padding:12px;
+  background:#22201b;
+  color:white;
+  border:1px solid #655337;
+  border-radius:5px;
+}
+
+#products {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:24px;
+}
+
+.card {
+  background:#1d1b17;
+  border:1px solid #373025;
+  border-radius:9px;
+  overflow:hidden;
+  transition:.3s;
+}
+
+.card:hover {
+  transform:translateY(-6px);
+  border-color:#c49a50;
+}
+
+.card img {
+  width:100%;
+  height:230px;
+  object-fit:cover;
+}
+
+.card-content { padding:18px; }
+
+.category {
+  color:#c49a50;
+  font-size:12px;
+  text-transform:uppercase;
+}
+
+.card h3 { margin:10px 0; }
+
+.price {
+  color:#e5bd72;
+  font-size:21px;
+  margin:12px 0;
+}
+
+.favorite {
+  background:#343027;
+  color:white;
+  margin-left:5px;
+}
+
+#game {
+  background:linear-gradient(135deg,#282116,#14120f);
+  border:1px solid #8d6b37;
+  border-radius:12px;
+  text-align:center;
+  padding:40px 20px;
+}
+
+#game h2 {
+  color:#e3bd75;
+  margin-bottom:20px;
+}
+
+#game button { margin:8px; }
+
+#question {
+  font-size:21px;
+  margin:25px;
+}
+
+#result {
+  color:#e6bc72;
+  margin:20px;
+  min-height:25px;
+}
+
+footer {
+  text-align:center;
+  padding:35px;
+  color:#888;
+  border-top:1px solid #39332a;
+}
+
+@media(max-width:600px) {
+  .hero h1 {font-size:38px;}
+  nav {display:none;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">LIQUOR VAULT</div>
+  <nav>
+    <a href="#collection">Collection</a>
+    <a href="#game">Game</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>DISCOVER THE VAULT</h1>
+  <p>
+    Explore an extensive collection of spirits, wines,
+    champagnes and premium bottles from around the world.
+  </p>
+  <button onclick="document.getElementById('collection').scrollIntoView()">
+    EXPLORE COLLECTION
+  </button>
+</div>
+
+<section id="collection">
+  <h2 class="section-title">The Collection</h2>
+
+  <div class="controls">
+    <input id="search" placeholder="Search bottles..." oninput="render()">
+
+    <select id="category" onchange="render()">
+      <option value="All">All Categories</option>
+      <option>Whiskey</option>
+      <option>Vodka</option>
+      <option>Gin</option>
+      <option>Rum</option>
+      <option>Tequila</option>
+      <option>Wine</option>
+      <option>Champagne</option>
+    </select>
+
+    <select id="sort" onchange="render()">
+      <option value="default">Sort by</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+    </select>
+  </div>
+
+  <div id="products"></div>
+</section>
+
+<section>
+  <div id="game">
+    <h2>🥃 THE DRINK MASTER GAME</h2>
+    <p>Can you identify the drink from its clues?</p>
+
+    <div id="question"></div>
+    <div id="answers"></div>
+    <div id="result"></div>
+    <p>Score: <span id="score">0</span></p>
+    <button onclick="nextQuestion()">NEXT QUESTION</button>
+  </div>
+</section>
+
+<section id="about">
+  <h2 class="section-title">About Liquor Vault</h2>
+  <p style="line-height:1.8;color:#bbb">
+    A digital showcase of international drinks, famous brands,
+    unique bottles and premium collections.
+    Product prices are illustrative until connected to verified
+    retailer pricing data.
+  </p>
+</section>
+
+<footer>
+  LIQUOR VAULT © 2026 | Premium Collection Experience
+  <p style="margin-top:12px">
+    For adults of legal drinking age only. Please drink responsibly.
+  </p>
+</footer>
+
+<script>
+
+const products = [
+{
+name:"Johnnie Walker Black Label",
+category:"Whiskey",
+price:159,
+image:"https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=600"
+},
+{
+name:"Jack Daniel's",
+category:"Whiskey",
+price:119,
+image:"https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600"
+},
+{
+name:"Grey Goose",
+category:"Vodka",
+price:179,
+image:"https://images.unsplash.com/photo-1608270586620-248524c67de9?w=600"
+},
+{
+name:"Absolut Vodka",
+category:"Vodka",
+price:89,
+image:"https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=600"
+},
+{
+name:"Bombay Sapphire",
+category:"Gin",
+price:139,
+image:"https://images.unsplash.com/photo-1513558161293-cdaf765edfd4?w=600"
+},
+{
+name:"Hendrick's Gin",
+category:"Gin",
+price:169,
+image:"https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600"
+},
+{
+name:"Havana Club",
+category:"Rum",
+price:99,
+image:"https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600"
+},
+{
+name:"Bacardi Carta Blanca",
+category:"Rum",
+price:89,
+image:"https://images.unsplash.com/photo-1513558161293-cdaf765edfd4?w=600"
+},
+{
+name:"Patrón Silver",
+category:"Tequila",
+price:229,
+image:"https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600"
+},
+{
+name:"Don Julio Blanco",
+category:"Tequila",
+price:249,
+image:"https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=600"
+},
+{
+name:"Château Red Wine",
+category:"Wine",
+price:110,
+image:"https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600"
+},
+{
+name:"Premium Champagne",
+category:"Champagne",
+price:299,
+image:"https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?w=600"
+}
+];
+
+let favorites = [];
+
+function render() {
+  const search = document.getElementById("search").value.toLowerCase();
+  const category = document.getElementById("category").value;
+  const sort = document.getElementById("sort").value;
+
+  let list = products.filter(p =>
+    p.name.toLowerCase().includes(search) &&
+    (category === "All" || p.category === category)
+  );
+
+  if(sort === "low") list.sort((a,b)=>a.price-b.price);
+  if(sort === "high") list.sort((a,b)=>b.price-a.price);
+
+  document.getElementById("products").innerHTML =
+    list.map(p => `
+      <div class="card">
+        <img src="${p.image}" alt="${p.name}" loading="lazy">
+        <div class="card-content">
+          <div class="category">${p.category}</div>
+          <h3>${p.name}</h3>
+          <div class="price">₪${p.price}</div>
+          <button onclick="alert('This is a collection showcase, not a checkout.')">
+            DETAILS
+          </button>
+          <button class="favorite" onclick="toggleFavorite('${p.name}')">
+            ${favorites.includes(p.name) ? "♥" : "♡"}
+          </button>
+        </div>
+      </div>
+    `).join("");
+}
+
+function toggleFavorite(name) {
+  if(favorites.includes(name)) {
+    favorites = favorites.filter(x=>x!==name);
+  } else {
+    favorites.push(name);
+  }
+  render();
+}
+
+// GAME
+
+const questions = [
+{
+q:"Which spirit is traditionally made from agave?",
+a:["Vodka","Tequila","Gin","Rum"],
+correct:"Tequila"
+},
+{
+q:"Which drink is made primarily from juniper-flavored spirit?",
+a:["Gin","Whiskey","Wine","Rum"],
+correct:"Gin"
+},
+{
+q:"Which country is famous for Scotch whisky?",
+a:["Italy","Scotland","Mexico","Brazil"],
+correct:"Scotland"
+},
+{
+q:"What is the main ingredient in wine?",
+a:["Potatoes","Grapes","Rice","Corn"],
+correct:"Grapes"
+},
+{
+q:"Which spirit is traditionally made from sugarcane?",
+a:["Rum","Gin","Tequila","Vodka"],
+correct:"Rum"
+},
+{
+q:"Champagne comes from which country?",
+a:["France","Spain","Germany","Japan"],
+correct:"France"
+}
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+function nextQuestion() {
+  current = Math.floor(Math.random()*questions.length);
+  answered = false;
+
+  const q = questions[current];
+
+  document.getElementById("question").innerText = q.q;
+  document.getElementById("result").innerText = "";
+
+  document.getElementById("answers").innerHTML =
+    q.a.map(answer =>
+      `<button onclick="checkAnswer('${answer}')">${answer}</button>`
+    ).join("");
+}
+
+function checkAnswer(answer) {
+  if(answered) return;
+  answered = true;
+
+  const correct = questions[current].correct;
+
+  if(answer === correct) {
+    score += 10;
+    document.getElementById("result").innerText =
+      "✓ Correct! +10 points";
+  } else {
+    document.getElementById("result").innerText =
+      "✗ Not quite! Correct answer: " + correct;
+  }
+
+  document.getElementById("score").innerText = score;
+}
+
+render();
+nextQuestion();
+
+</script>
+
+</body>
+</html>
+
